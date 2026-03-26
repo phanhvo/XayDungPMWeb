@@ -1,5 +1,15 @@
 const db = require("../config/db");
+exports.findByCredentials = async (username, password) => {
+  const result = await db.query(
+    `SELECT * FROM taikhoan
+     WHERE tentk = $1
+     AND pass_hash = $2
+     AND trangthai = 'hoạt động'`,
+    [username, password]
+  );
 
+  return result.rows[0];
+}
 exports.getAllUsers = async () => {
   const [rows] = await db.query("SELECT * FROM users");
   return rows;

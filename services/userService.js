@@ -1,15 +1,10 @@
 const db = require("../config/db");
 const jwt = require("jsonwebtoken");
-exports.login = async (username, password) => {
-  const result = await db.query(
-    `SELECT * FROM taikhoan
-     WHERE tentk = $1
-     AND pass_hash = $2
-     AND trangthai = 'hoạt động'`,
-    [username, password]
-  );
+const userRepository = require("../repositories/userRepository");
 
-  const user = result.rows[0];
+exports.login = async (username, password) => {
+
+  const user = await userRepository.findByCredentials(username, password);
 
   if (!user) {
     throw new Error("Sai tài khoản hoặc mật khẩu");
