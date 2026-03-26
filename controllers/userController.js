@@ -75,3 +75,13 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+exports.login = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const data = await userService.login(username, password);
+    res.json(data);
+  } catch (err) {
+    res.status(401).json({ message: err.message });
+  }
+};

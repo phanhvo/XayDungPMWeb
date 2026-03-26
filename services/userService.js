@@ -1,5 +1,36 @@
 const db = require("../config/db");
+const jwt = require("jsonwebtoken");
+exports.login = async (username, password) => {
+  const result = await db.query(
+    `SELECT * FROM taikhoan
+     WHERE tentk = $1
+     AND pass_hash = $2
+     AND trangthai = 'hoạt động'`,
+    [username, password]
+  );
 
+  const user = result.rows[0];
+
+  if (!user) {
+    throw new Error("Sai tài khoản hoặc mật khẩu");
+  }
+
+  const token = jwt.sign(
+    {
+      id: user.ma_tai_khoan,
+      role: user.phanquyen,
+      ma_nhan_vien: user.ma_nhan_vien
+    },
+    process.env.JWT_SECRET || "SECRET_KEY",
+    { expiresIn: "1d" }
+  );
+
+  return {
+    token,
+    role: user.phanquyen,
+    username: user.tentk
+  };
+};
 exports.getAllUsers = async () => {
   const result = await db.query(
     "SELECT * FROM users ORDER BY id"
