@@ -33,7 +33,7 @@ export default function Login() {
       } else if (role === "nhanvien") {
         navigate("/");
       }
-
+      window.location.reload(); 
     } catch (err) {
       setError("Sai tài khoản hoặc mật khẩu");
     }
@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Đăng nhập</h2>
+        <h2>Quản Lý Nhân Sự</h2>
 
         <input
           placeholder="Tên tài khoản"

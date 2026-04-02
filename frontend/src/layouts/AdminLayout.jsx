@@ -5,7 +5,7 @@ import { LuLayoutDashboard, LuBuilding2, LuUsers, LuUserCog, LuMenu, LuLogOut } 
 
 // pages
 import Dashboard from "../pages/admin/Dashboard";
-import Employees from "../pages/admin/Employee";
+import AdminEmployeeManager from "../pages/admin/Employee";
 import Accounts from "../pages/admin/Account";
 import Departments from "../pages/admin/Department";
 import "../styles/admin.css";
@@ -67,7 +67,7 @@ export default function AdminLayout() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="departments" element={<Departments />} />
-              <Route path="employees" element={<Employees />} />
+              <Route path="employees" element={<AdminEmployeeManager />} />
               <Route path="accounts" element={<Accounts />} />
             </Routes>
           </div>

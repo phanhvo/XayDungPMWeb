@@ -6,6 +6,7 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 const app = express();
 
 app.use(cors());
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 app.use("/", userRoutes);
 app.use("/", authRoutes);
 app.use("/", employeeRoutes);
+app.use("/", dashboardRoutes);
 app.use("/", departmentRoutes);
 const PORT = process.env.PORT || 3000;
 
