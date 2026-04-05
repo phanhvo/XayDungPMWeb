@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
+
 exports.verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
 
@@ -18,7 +18,7 @@ exports.verifyToken = (req, res, next) => {
 };
 
 exports.isAdmin = (req, res, next) => {
-    if (req.user.role !== "admin") {
+    if (!req.user || req.user.role !== "admin") {
         return res.status(403).json({ message: "Không có quyền admin" });
     }
     next();

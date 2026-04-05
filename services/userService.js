@@ -1,31 +1,5 @@
 const db = require("../config/db");
-const jwt = require("jsonwebtoken");
-const userRepository = require("../repositories/userRepository");
 
-exports.login = async (username, password) => {
-
-  const user = await userRepository.findByCredentials(username, password);
-
-  if (!user) {
-    throw new Error("Sai tài khoản hoặc mật khẩu");
-  }
-
-  const token = jwt.sign(
-    {
-      id: user.ma_tai_khoan,
-      role: user.phanquyen,
-      ma_nhan_vien: user.ma_nhan_vien
-    },
-    process.env.JWT_SECRET || "SECRET_KEY",
-    { expiresIn: "1d" }
-  );
-
-  return {
-    token,
-    role: user.phanquyen,
-    username: user.tentk
-  };
-};
 exports.getAllUsers = async () => {
   const result = await db.query(
     "SELECT * FROM users ORDER BY id"
