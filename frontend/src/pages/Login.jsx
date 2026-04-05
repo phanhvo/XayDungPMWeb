@@ -26,6 +26,8 @@ export default function Login() {
       // lưu
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      localStorage.setItem("username", res.data.username);
+      localStorage.setItem("manv", res.data.manv);
 
       // phân quyền
       if (role === "admin") {
@@ -33,9 +35,20 @@ export default function Login() {
       } else if (role === "nhanvien") {
         navigate("/");
       }
-      window.location.reload(); 
+      window.location.reload();
     } catch (err) {
-      setError("Sai tài khoản hoặc mật khẩu");
+      // In lỗi thật ra F12 (Console) để dân Dev xem
+      console.log(
+        "CHI TIẾT LỖI TỪ BACKEND:",
+        err.response?.data || err.message,
+      );
+
+      // Hiển thị lỗi thật lên màn hình thay vì câu mặc định
+      const realError =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Lỗi không thể kết nối tới Server!";
+      setError(realError);
     }
   };
   return (
@@ -60,5 +73,4 @@ export default function Login() {
       </div>
     </div>
   );
-
 }

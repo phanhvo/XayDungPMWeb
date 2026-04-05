@@ -1,269 +1,170 @@
-.employee-container {
-  padding: 0 10px;
+.portal-container {
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.employee-container h1 {
-  padding-bottom: 5px;
-  text-align: left;
+.portal-container h2 {
+  margin: 0;
+  color: #2c3e50;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
 }
 
-/* Phần Filter (Tìm kiếm & Lọc) */
-.filter-section {
-  display: flex;
-  gap: 15px;
+/* === Bố cục Profile Card === */
+.profile-card {
   background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  max-width: 700px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.filter-section input,
-.filter-section select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  outline: none;
-}
-
-.filter-section input:focus,
-.filter-section select:focus {
-  border-color: #667eea;
-}
-
-/* Phần Form nhập liệu dùng CSS Grid */
-.employee-form-card {
-  background: white;
+.profile-header {
+  background: linear-gradient(135deg, #121d51, #2e4396);
+  color: white;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-.employee-form-grid {
+.avatar {
+  width: 70px;
+  height: 70px;
+  background: white;
+  color: #121d51;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.profile-header h3 {
+  margin: 0 0 5px 0;
+  font-size: 22px;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.profile-body {
+  padding: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 15px;
-  margin-bottom: 15px;
 }
 
-.form-group {
+.info-group {
   display: flex;
   flex-direction: column;
-  text-align: left;
-  gap: 5px;
+  gap: 4px;
 }
 
-.form-group label {
+.info-group label {
   font-size: 13px;
+  color: #7f8c8d;
   font-weight: bold;
-  color: #555;
 }
 
-.form-group input,
-.form-group select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
+.info-group span {
+  font-size: 15px;
+  color: #2c3e50;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #667eea;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
-}
-
-.form-actions {
+/* === Nút Bấm Chấm Công === */
+.action-buttons {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
+  gap: 15px;
 }
 
-.form-actions button {
-  padding: 10px 20px;
+.btn-checkin,
+.btn-checkout {
+  padding: 12px 24px;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  border-radius: 8px;
+  font-size: 15px;
   font-weight: bold;
+  cursor: pointer;
   color: white;
   transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn-add { background: #455a79; }
-.btn-update { background: #667eea; }
-.btn-clear { background: #ccc; color: #333 !important; }
+.btn-checkin {
+  background: #27ae60;
+}
+.btn-checkin:hover:not(:disabled) {
+  background: #219653;
+}
 
-/* Phần Table */
+.btn-checkout {
+  background: #e74c3c;
+}
+.btn-checkout:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.btn-checkin:disabled,
+.btn-checkout:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* === Bảng Dữ Liệu === */
 .table-responsive {
   overflow-x: auto;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.employee-table {
+.portal-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1200px; /* Đảm bảo bảng không bị co dúm khi có nhiều cột */
 }
 
-.employee-table th,
-.employee-table td {
-  padding: 12px;
+.portal-table th,
+.portal-table td {
+  padding: 14px;
   text-align: left;
+  border-bottom: 1px solid #f1f2f6;
   font-size: 14px;
 }
 
-.employee-table th {
-  background: #f5f6fa;
-  font-weight: bold;
+.portal-table th {
+  background: #f8f9fa;
+  color: #7f8c8d;
+  font-weight: 600;
 }
 
-.employee-table tr {
-  border-bottom: 1px solid #eee;
+.portal-table tr:hover {
+  background: #fcfcfc;
 }
 
-.employee-table tr:hover {
-  background: #f9f9ff;
-}
-
-.action-btns button {
-  padding: 5px 10px;
-  margin-right: 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-edit { background: #fced95; color: black; }
-.btn-delete { background: #ff5768; color: white; }
-
-/* Nút Thêm nhân viên ở màn hình chính */
-.header-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.header-actions h1 {
-  margin: 0;
-  padding: 0;
-}
-
-.btn-add-new {
-  background: #455a79;
-  color: white;
-  padding: 10px 20px;
-  border: none;
+.status-badge {
+  padding: 4px 10px;
   border-radius: 6px;
+  font-size: 12px;
   font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
 }
 
-.btn-add-new:hover {
-  background: #33425a;
+.status-badge.ontime {
+  background: #e8f8f5;
+  color: #27ae60;
 }
-
-/* HIỆU ỨNG LỚP PHỦ MODAL (OVERLAY) */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* Nền đen mờ */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Đảm bảo nằm trên cùng */
-  backdrop-filter: blur(2px);
-}
-
-/* NỘI DUNG MODAL */
-.modal-content {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 800px;
-  max-height: 90vh; /* Tránh form quá dài vượt quá màn hình */
-  overflow-y: auto; /* Cuộn dọc nếu form quá dài */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  animation: modalFadeIn 0.3s ease;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-
-.modal-header h2 {
-  margin: 0;
-  color: #333;
-}
-
-.btn-close-modal {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #888;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.btn-close-modal:hover {
-  color: red;
-}
-
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.autocomplete-wrapper {
-  position: relative;
-}
-
-.autocomplete-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1001; /* Đảm bảo nổi lên trên các input khác */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  margin-top: 5px;
-}
-
-.autocomplete-item {
-  padding: 10px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-  text-align: left;
-  transition: 0.2s;
-}
-
-.autocomplete-item:last-child {
-  border-bottom: none;
-}
-
-.autocomplete-item:hover {
-  background: #f4f3ec;
-  color: #aa3bff;
-  font-weight: bold;
+.status-badge.late {
+  background: #fdf2e9;
+  color: #e67e22;
 }
