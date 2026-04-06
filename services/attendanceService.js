@@ -16,19 +16,19 @@ exports.checkIn = async (manv) => {
   const isLate = now.getHours() >= 8 && now.getMinutes() > 0;
   const trangthai = isLate ? "đi trễ" : "đi làm";
 
-  // Random ID cho ma_cham_cong (dựa theo giới hạn VARCHAR(10))
-  const ma_cham_cong =
+  // Random ID cho macc (dựa theo giới hạn VARCHAR(10))
+  const macc =
     "C" +
     Math.floor(Math.random() * 100000000)
       .toString()
       .padStart(8, "0");
 
   return await attendanceRepo.checkIn({
-    ma_cham_cong,
+    macc,
     ngaylam: today,
     checkin: now,
     trangthai,
-    ma_nhan_vien: manv,
+    manv: manv,
   });
 };
 
@@ -49,7 +49,7 @@ exports.checkOut = async (manv) => {
   let trangthai = record.trangthai;
   if (tonggiolam > 8) trangthai = "tăng ca";
 
-  return await attendanceRepo.checkOut(record.ma_cham_cong, {
+  return await attendanceRepo.checkOut(record.macc, {
     checkout: checkoutTime,
     tonggiolam,
     trangthai,

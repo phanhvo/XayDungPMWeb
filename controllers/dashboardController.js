@@ -2,46 +2,34 @@ const db = require("../config/db");
 
 exports.getDashboardStats = async (req, res) => {
   try {
-    // 1. Tổng nhân viên (Trừ những người đã nghỉ việc)
-    const empResult = await db.query(
-      "SELECT COUNT(*) FROM nhanvien WHERE trangthai != 'Nghỉ việc'",
-    );
-    const totalEmployees = parseInt(empResult.rows[0].count);
-
+    // 1. Tổng nhân viên
+    const totalNV = await db.query("SELECT COUNT(*) FROM nhanvien");
+    
     // 2. Tổng phòng ban
-    const deptResult = await db.query("SELECT COUNT(*) FROM phongban");
-    const totalDepartments = parseInt(deptResult.rows[0].count);
-
-    // 3. Tổng quỹ lương cơ bản
-    const salaryResult = await db.query(
-      "SELECT SUM(luongcoban) FROM nhanvien WHERE trangthai != 'Nghỉ việc'",
-    );
-    const totalSalary = parseInt(salaryResult.rows[0].sum) || 0;
-
-    // 4. Số người đi làm hôm nay (Sửa đúng tên cột là ngaylam và ma_nhan_vien)
-    const attendanceResult = await db.query(
-      "SELECT COUNT(DISTINCT ma_nhan_vien) FROM chamcong WHERE DATE(ngaylam) = CURRENT_DATE",
-    );
-    const attendanceToday = parseInt(attendanceResult.rows[0].count);
-
-    // 5. 5 nhân viên mới gia nhập gần nhất (Sửa đúng tên cột ma_nhan_vien)
-    const recentEmpResult = await db.query(
-      `SELECT ma_nhan_vien AS manv, hotennv, chucvu, ngaybatdaulam, trangthai 
-             FROM nhanvien 
-             ORDER BY ngaybatdaulam DESC NULLS LAST 
-             LIMIT 5`,
+    const totalPB = await db.query("SELECT COUNT(*) FROM phongban");
+    
+    // 3. Tổng quỹ lương
+    const totalSalary = await db.query("SELECT SUM(luongcoban) FROM luong");
+    
+    // 4. ĐIỂM QUAN TRỌNG: Lấy số người đi làm theo ngày thực tế của hệ thống
+    const attendanceToday = await db.query(
+        "SELECT COUNT(*) FROM chamcong WHERE ngaylam = CURRENT_DATE AND (trangthai = 'đi làm' OR trangthai = 'đi trễ' OR trangthai = 'tăng ca')"
     );
 
-    // Trả kết quả về cho Frontend
+    // 5. 5 nhân viên mới nhất
+    const recentNV = await db.query(
+        "SELECT manv, hotennv, chucvu, ngaybatdaulam, trangthai FROM nhanvien ORDER BY ngaybatdaulam DESC LIMIT 5"
+    );
+
     res.json({
-      totalEmployees,
-      totalDepartments,
-      totalSalary,
-      attendanceToday,
-      recentEmployees: recentEmpResult.rows,
+      totalEmployees: parseInt(totalNV.rows[0].count),
+      totalDepartments: parseInt(totalPB.rows[0].count),
+      totalSalary: parseFloat(totalSalary.rows[0].sum || 0),
+      attendanceToday: parseInt(attendanceToday.rows[0].count),
+      recentEmployees: recentNV.rows
     });
   } catch (err) {
-    console.error("Chi tiết lỗi Dashboard:", err);
-    res.status(500).json({ error: "Lỗi máy chủ khi lấy dữ liệu Dashboard" });
+    console.error(err);
+    res.status(500).json({ error: "Lỗi Server" });
   }
 };
