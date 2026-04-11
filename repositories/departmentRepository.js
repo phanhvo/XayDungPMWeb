@@ -11,29 +11,29 @@ exports.getDepartmentById = async (mapb) => {
 };
 
 exports.createDepartment = async (data) => {
-    const { mapb, tenpban, mota, matp } = data;
+    const { mapb, tenpban, mota } = data;
     
     const check = await db.query("SELECT * FROM phongban WHERE mapb = $1", [mapb]);
     if (check.rows.length > 0) throw new Error("Mã phòng ban đã tồn tại");
 
     const result = await db.query(
-        "INSERT INTO phongban (mapb, tenpban, mota, matp) VALUES ($1, $2, $3, $4) RETURNING *",
-        [mapb, tenpban, mota, matp]
+        "INSERT INTO phongban (mapb, tenpban, mota ) VALUES ($1, $2, $3) RETURNING *",
+        [mapb, tenpban, mota]
     );
     return result.rows[0];
 };
 
 exports.updateDepartment = async (mapb, data) => {
-    const { tenpban, mota, matp } = data;
+    const { tenpban, mota } = data;
+    // matp không được dùng COALESCE để có thể cập nhật về NULL khi Admin chọn "Trống"
     const result = await db.query(
         `UPDATE phongban 
          SET tenpban = COALESCE($1, tenpban), 
              mota = COALESCE($2, mota), 
-             matp = COALESCE($3, matp) 
+             matp = $3 
          WHERE mapb = $4 RETURNING *`,
         [tenpban, mota, matp, mapb]
     );
-    if (result.rows.length === 0) throw new Error("Không tìm thấy phòng ban");
     return result.rows[0];
 };
 

@@ -4,15 +4,13 @@ require("dotenv").config();
 const db = require("./config/db");
 
 // Import các file routes hiện có
-const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
-const employeeRoutes = require("./routes/employeeRoutes");
-const departmentRoutes = require("./routes/departmentRoutes");
-const dashboardRoutes = require("./routes/dashboardRoutes");
-
-// 🔥 1. THÊM 2 DÒNG NÀY: Import file route Chấm Công và Lương
-const attendanceRoutes = require("./routes/attendanceRoutes");
+const userRoutes = require("./routes/userRoutes");
 const salaryRoutes = require("./routes/salaryRoutes");
+const employeeRoutes = require("./routes/employeeRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const departmentRoutes = require("./routes/departmentRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
 
 const app = express();
 

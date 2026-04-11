@@ -9,6 +9,11 @@ exports.login = async (username, password) => {
         throw new Error("Tài khoản không tồn tại");
     }
 
+    // Đoạn này trong code của bạn sẽ tự động chặn những người vừa bị "xóa"
+    if (user.trangthai !== "hoạt động") {
+        throw new Error("Tài khoản đã bị khoá");
+    }
+
     if (user.trangthai !== "hoạt động") {
         throw new Error("Tài khoản đã bị khoá");
     }

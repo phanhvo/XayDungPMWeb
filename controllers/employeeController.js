@@ -1,4 +1,5 @@
 const employeeService = require("../services/employeeService");
+const db= require("../config/db");
 
 exports.getEmployees = async (req, res) => {
     try {
@@ -45,16 +46,18 @@ exports.updateEmployee = async (req, res) => {
 };
 
 exports.deleteEmployee = async (req, res) => {
+    const { manv } = req.params;
     try {
-        await employeeService.deleteEmployee(req.params.manv);
-        res.json({ message: "Xoá nhân viên thành công" });
+        // GỌI HÀM NÀY: Để nó chạy logic kiểm tra xem có phải Trưởng phòng không
+        const result = await employeeService.softDeleteEmployee(manv);
+        
+        res.json({ 
+            message: "Nhân viên đã nghỉ việc và tài khoản đã bị khoá thành công",
+            data: result 
+        });
     } catch (err) {
-        // Bắt lỗi Foreign Key từ PostgreSQL (Mã lỗi 23503)
-        if (err.code === '23503') {
-            return res.status(400).json({ 
-                error: "Không thể xoá nhân viên này vì đã có dữ liệu liên quan (chấm công, lương, tài khoản,...)." 
-            });
-        }
+        console.error("Lỗi khi cho nhân viên nghỉ việc:", err.message);
+        // Trả về lỗi 400 và nội dung lỗi từ Service (để hiện alert ở Frontend)
         res.status(400).json({ error: err.message });
     }
 };

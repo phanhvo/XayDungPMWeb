@@ -44,14 +44,14 @@ exports.checkOut = async (manv) => {
 
   // Tính tổng giờ làm (chuyển đổi ms -> giờ)
   const diffMs = checkoutTime - checkinTime;
-  const tonggiolam = (diffMs / (1000 * 60 * 60)).toFixed(2);
+  const sogiolam = (diffMs / (1000 * 60 * 60)).toFixed(2);
 
   let trangthai = record.trangthai;
-  if (tonggiolam > 8) trangthai = "tăng ca";
+  if (sogiolam > 8) trangthai = "tăng ca";
 
   return await attendanceRepo.checkOut(record.macc, {
     checkout: checkoutTime,
-    tonggiolam,
+    sogiolam,
     trangthai,
   });
 };

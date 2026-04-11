@@ -4,8 +4,7 @@ const departmentController = require("../controllers/departmentController");
 const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
 
 router.get("/phongban", verifyToken, departmentController.getAllDepartments);
-
-router.post("/phongban", verifyToken, isAdmin, departmentController.createDepartment);
+router.get("/phongban/:mapb/history", verifyToken, departmentController.getHistory);router.post("/phongban", verifyToken, isAdmin, departmentController.createDepartment);
 router.put("/phongban/:mapb", verifyToken, isAdmin, departmentController.updateDepartment);
 router.delete("/phongban/:mapb", verifyToken, isAdmin, departmentController.deleteDepartment);
 
