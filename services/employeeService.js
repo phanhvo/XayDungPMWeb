@@ -1,4 +1,5 @@
 const employeeRepository = require("../repositories/employeeRepository");
+const userRepository = require("../repositories/userRepository");
 const db = require("../config/db");
 exports.getEmployees = async (filters) => {
     return await employeeRepository.getEmployees(filters);
@@ -9,10 +10,31 @@ exports.getEmployeeById = async (manv) => {
 };
 
 exports.createEmployee = async (data) => {
-    if (!data.manv || !data.hotennv) {
-        throw new Error("Mã nhân viên và Họ tên nhân viên là bắt buộc");
+    try {
+        await db.query('BEGIN'); // Sử dụng transaction để đảm bảo an toàn dữ liệu
+
+        // 1. Tạo nhân viên mới
+        const newEmp = await employeeRepository.createEmployee(data);
+
+        // 2. Logic chuyển đổi mã: NV01 -> TK01
+        // Dùng replace để thay 'NV' (hoặc 'nv') thành 'TK'
+        const tenTaiKhoan = data.manv.toUpperCase().replace('NV', 'TK');
+
+        const userData = {
+            tentk: tenTaiKhoan,     // Tên tài khoản mới (ví dụ: TK01)
+            pass: "123",            // Mật khẩu mặc định
+            phanquyen: "nhanvien",  // Quyền mặc định
+            manv: data.manv         // Liên kết với mã nhân viên gốc
+        };
+        
+        await userRepository.createUser(userData);
+
+        await db.query('COMMIT');
+        return newEmp;
+    } catch (err) {
+        await db.query('ROLLBACK');
+        throw err;
     }
-    return await employeeRepository.createEmployee(data);
 };
 
 exports.updateEmployee = async (manv, data) => {
