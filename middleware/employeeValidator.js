@@ -21,7 +21,7 @@ exports.validateEmployee = (req, res, next) => {
         return res.status(400).json({ error: "Số điện thoại không hợp lệ (10 số VN)." });
     }
 
-    // 3. Xử lý ngày tháng & Giới hạn độ tuổi lao động
+    // 3. Xử lý ngày tháng
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -35,35 +35,48 @@ exports.validateEmployee = (req, res, next) => {
     const start = safeParseDate(ngaybatdaulam);
 
     if (birth === "INVALID" || start === "INVALID") {
-        return res.status(400).json({ error: "Ngày tháng không hợp lệ (Kiểm tra lại những ngày như 30/02)." });
+        return res.status(400).json({ error: "Ngày tháng không hợp lệ (Kiểm tra lại định dạng hoặc những ngày như 30/02)." });
     }
 
+    // Kiểm tra logic Ngày sinh
     if (birth) {
         birth.setHours(0, 0, 0, 0);
         if (birth > today) return res.status(400).json({ error: "Ngày sinh không thể ở tương lai." });
-        
-        // TÍNH TOÁN ĐỘ TUỔI
-        const age = today.getFullYear() - birth.getFullYear();
-        
-        // Chặn dưới: Phải đủ 18 tuổi
-        if (age < 18) {
-            return res.status(400).json({ error: "Nhân viên phải từ 18 tuổi trở lên." });
+
+        const ageNow = today.getFullYear() - birth.getFullYear();
+        if (ageNow < 18) {
+            return res.status(400).json({ error: "Nhân viên hiện tại phải từ 18 tuổi trở lên." });
         }
-        
-        // CHẶN TRÊN: Giới hạn tuổi lao động (Ví dụ: 65 tuổi)
-        if (age > 65) {
-            return res.status(400).json({ error: "Nhân viên đã vượt quá độ tuổi lao động cho phép (tối đa 65 tuổi)." });
+        if (ageNow > 65) {
+            return res.status(400).json({ error: "Nhân viên đã vượt quá độ tuổi lao động (tối đa 65 tuổi)." });
         }
     }
 
+    // Kiểm tra logic Ngày bắt đầu làm việc
     if (start) {
         start.setHours(0, 0, 0, 0);
-        // Chặn ngày đi làm ở tương lai
+
         if (start > today) {
             return res.status(400).json({ error: "Ngày bắt đầu làm việc không thể vượt quá ngày hiện tại." });
         }
-        if (birth && start < birth) {
-            return res.status(400).json({ error: "Ngày bắt đầu làm không thể trước ngày sinh." });
+
+        if (birth) {
+            if (start < birth) {
+                return res.status(400).json({ error: "Ngày bắt đầu làm không thể trước ngày sinh." });
+            }
+
+            // --- LOGIC SỬA ĐỔI: Kiểm tra tuổi tại thời điểm bắt đầu đi làm ---
+            let ageAtStart = start.getFullYear() - birth.getFullYear();
+            const m = start.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && start.getDate() < birth.getDate())) {
+                ageAtStart--;
+            }
+
+            if (ageAtStart < 18) {
+                return res.status(400).json({ 
+                    error: `Cảnh báo: Nhân viên mới ${ageAtStart} tuổi khi bắt đầu làm việc (${start.getFullYear()}). Phải đủ 18 tuổi.` 
+                });
+            }
         }
     }
 
