@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:3000/", // đổi nếu BE khác port
+  baseURL: "https://quanlynhansu-be.onrender.com/", // đổi nếu BE khác port
+  //baseURL: "http://localhost:3000", // dùng khi chạy BE ở local
 });
 
 // gắn token (sau này dùng)
@@ -15,4 +16,4 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export default API; // 🔥 bắt buộc phải có
+export default API; 

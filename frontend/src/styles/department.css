@@ -159,3 +159,53 @@
 }
 
 .employee-item:last-child { border-bottom: none; }
+
+/* Màu cho nút Xem chi tiết */
+.btn-view {
+    background: #27ae60;
+    color: white;
+    transition: 0.3s;
+}
+
+.btn-view:hover {
+    background: #219150;
+    box-shadow: 0 2px 5px rgba(39, 174, 96, 0.3);
+}
+
+/* Tùy chỉnh hiển thị dropdown chọn Trưởng phòng */
+.form-group select {
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.form-group select option:disabled {
+    color: #a1a1a1;
+    background-color: #f5f5f5;
+    font-style: italic;
+}
+
+/* Làm đẹp thanh cuộn (scrollbar) cho danh sách nhân viên trong Modal */
+.employee-list::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar {
+    width: 6px;
+}
+
+.employee-list::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+/* Style cho badge trạng thái trong Modal Xem chi tiết */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Hiệu ứng khi hover vào dòng trong danh sách nhân viên gán */
+.employee-item:hover {
+    background-color: #f0f7ff;
+    cursor: pointer;
+}

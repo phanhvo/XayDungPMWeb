@@ -94,12 +94,16 @@ export default function Employees() {
   };
 
   const handleDelete = async (manv) => {
-    if (!window.confirm("Bạn có chắc muốn xoá nhân viên này?")) return;
+    // Thay đổi câu thông báo để người dùng hiểu đây là cho nghỉ chứ không phải xóa vĩnh viễn
+    if (!window.confirm("Xác nhận cho nhân viên này nghỉ việc? Tài khoản liên kết sẽ bị tự động khoá.")) return;
+    
     try {
-      await API.delete(`/nhanvien/${manv}`);
-      fetchEmployees();
+      const res = await API.delete(`/nhanvien/${manv}`);
+      alert(res.data.message || "Đã cập nhật trạng thái nghỉ việc thành công!");
+      fetchEmployees(); // Load lại danh sách để cập nhật màu sắc/trạng thái mới
     } catch (err) {
-      alert(err.response?.data?.error || "Xoá thất bại");
+      console.error("Lỗi khi cho nghỉ việc:", err);
+      alert(err.response?.data?.error || "Thao tác thất bại");
     }
   };
 
@@ -146,7 +150,6 @@ export default function Employees() {
         <select name="trangthai" value={filters.trangthai} onChange={handleFilterChange}>
           <option value="">Tất cả trạng thái</option>
           <option value="Đang làm việc">Đang làm việc</option>
-          <option value="Nghỉ việc">Nghỉ việc</option>
           <option value="Đình chỉ">Đình chỉ</option>
         </select>
         <input name="chucvu" placeholder="Lọc chức vụ..." value={filters.chucvu} onChange={handleFilterChange} />
@@ -206,7 +209,6 @@ export default function Employees() {
                 <label>Trạng thái</label>
                 <select name="trangthai" value={form.trangthai} onChange={handleChange}>
                   <option value="Đang làm việc">Đang làm việc</option>
-                  <option value="Nghỉ việc">Nghỉ việc</option>
                   <option value="Đình chỉ">Đình chỉ</option>
                 </select>
               </div>
@@ -312,9 +314,12 @@ export default function Employees() {
                   <td>{emp.email}</td>
                   <td>{emp.chucvu}</td>
                   <td>{emp.mapb}</td>
+                  
                   <td>
                     <span style={{
-                      color: emp.trangthai === 'Nghỉ việc' ? 'red' : 'green',
+                      // Dùng màu cam cho Đình chỉ, đỏ cho Nghỉ việc và xanh cho Đang làm việc
+                      color: emp.trangthai === 'Nghỉ việc' ? '#ff5768' : 
+                            emp.trangthai === 'Đình chỉ' ? '#e67e22' : '#27ae60',
                       fontWeight: 'bold'
                     }}>
                       {emp.trangthai}
@@ -322,7 +327,10 @@ export default function Employees() {
                   </td>
                   <td className="action-btns">
                     <button className="btn-edit" onClick={() => handleEdit(emp)}>Sửa</button>
-                    <button className="btn-delete" onClick={() => handleDelete(emp.manv)}>Xoá</button>
+                    {/* Chỉ hiện nút "Cho nghỉ" nếu nhân viên đó chưa nghỉ việc */}
+                    {emp.trangthai !== 'Nghỉ việc' && (
+                      <button className="btn-delete" onClick={() => handleDelete(emp.manv)}>Cho nghỉ</button>
+                    )}
                   </td>
                 </tr>
               ))

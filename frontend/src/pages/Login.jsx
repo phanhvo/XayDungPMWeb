@@ -21,11 +21,13 @@ export default function Login() {
         password,
       });
 
-      const { token, role } = res.data;
+
+      const { token, role, manv } = res.data;
 
       // lưu
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      if (manv) localStorage.setItem("manv", manv);
 
       // phân quyền
       if (role === "admin") {
