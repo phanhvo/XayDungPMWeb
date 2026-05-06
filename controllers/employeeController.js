@@ -5,7 +5,7 @@ exports.getEmployees = async (req, res) => {
     try {
         const filters = {
             search: req.query.search,
-            chucvu: req.query.chucvu,
+            macv: req.query.macv,
             mapb: req.query.mapb,
             trangthai: req.query.trangthai
         };

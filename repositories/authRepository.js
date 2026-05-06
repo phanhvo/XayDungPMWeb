@@ -19,7 +19,7 @@ exports.getByUsername = async (username) => {
 
 // CREATE
 exports.createAccount = async (data) => {
-    const { tentk, password, phanquyen, manv } = data;
+    const { tentk, password, phanquyen, manv, trangthai } = data;
 
     // check trùng
     const check = await db.query(
@@ -33,9 +33,9 @@ exports.createAccount = async (data) => {
 
     const result = await db.query(
         `INSERT INTO taikhoan (tentk, pass, phanquyen, trangthai, manv)
-         VALUES ($1, $2, $3, 'hoạt động', $4)
+         VALUES ($1, $2, $3, $4, $5)
          RETURNING *`,
-        [tentk, password, phanquyen, manv]
+        [tentk, password, phanquyen, trangthai || 'active', manv]
     );
 
     return result.rows[0];
@@ -46,12 +46,12 @@ exports.updateAccount = async (tentk, data) => {
 
     const result = await db.query(
         `UPDATE taikhoan
-         SET phanquyen = $1,
+         SET phanquyen = COALESCE($1, phanquyen),
              trangthai = COALESCE($2, trangthai),
              manv = COALESCE($3, manv)
          WHERE tentk = $4
          RETURNING *`,
-        [phanquyen, trangthai, manv, tentk]
+        [phanquyen || null, trangthai || null, manv || null, tentk]
     );
     if (result.rows.length === 0) {
         throw new Error("Không tìm thấy tài khoản");

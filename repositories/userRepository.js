@@ -11,12 +11,12 @@ exports.getUserById = async (id) => {
 };
 
 exports.createUser = async (userData) => {
-    const { tentk, pass, phanquyen, manv } = userData;
+    const { tentk, pass, phanquyen, trangthai, manv } = userData;
     // Sử dụng cú pháp $1, $2... của thư viện pg
     const result = await db.query(
         `INSERT INTO taikhoan (tentk, pass, phanquyen, trangthai, manv) 
-         VALUES ($1, $2, $3, 'hoạt động', $4) RETURNING *`,
-        [tentk, pass, phanquyen, manv]
+         VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+        [tentk, pass, phanquyen, trangthai, manv]
     );
     return result.rows[0];
 };

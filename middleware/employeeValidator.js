@@ -1,5 +1,5 @@
 exports.validateEmployee = (req, res, next) => {
-    const { manv, hotennv, email, sdt, ngsinh, ngaybatdaulam, chucvu } = req.body;
+    const { manv, hotennv, email, sdt, ngsinh, ngaybatdaulam, macv } = req.body;
     const isUpdate = req.method === 'PUT';
 
     // 1. Kiểm tra bắt buộc
@@ -9,8 +9,8 @@ exports.validateEmployee = (req, res, next) => {
     if (!hotennv || hotennv.trim().length < 2) {
         return res.status(400).json({ error: "Họ tên phải có ít nhất 2 ký tự." });
     }
-    if (!chucvu || chucvu.trim() === "") {
-        return res.status(400).json({ error: "Vui lòng chọn hoặc nhập chức vụ cho nhân viên." });
+    if (!macv || macv.trim() === "") {
+        return res.status(400).json({ error: "Vui lòng chọn hoặc nhập mã chức vụ cho nhân viên." });
     }
 
     // 2. Định dạng Email & Số điện thoại

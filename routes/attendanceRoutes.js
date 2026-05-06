@@ -8,4 +8,8 @@ router.get("/me", verifyToken, attendanceController.getMyAttendance);
 router.post("/checkin", verifyToken, attendanceController.checkIn);
 router.post("/checkout", verifyToken, attendanceController.checkOut);
 
+// Chỉ Admin hoặc HR mới có quyền gọi 2 API này
+router.get("/admin/all", attendanceController.getAllAttendances);
+router.put("/admin/update/:macc", attendanceController.adminUpdateAttendance);
+
 module.exports = router;

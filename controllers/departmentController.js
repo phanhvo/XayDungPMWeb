@@ -1,5 +1,4 @@
 const departmentService = require("../services/departmentService");
-const db = require("../config/db");
 
 exports.getAllDepartments = async (req, res) => {
     try {
@@ -65,15 +64,8 @@ exports.assignEmployees = async (req, res) => {
 exports.getHistory = async (req, res) => {
     try {
         const { mapb } = req.params;
-        const result = await db.query(
-            `SELECT l.*, n.hotennv 
-             FROM lichsuchucvu l 
-             JOIN nhanvien n ON l.manv = n.manv 
-             WHERE l.mapb = $1 
-             ORDER BY l.ngaybatdau DESC`, 
-            [mapb]
-        );
-        res.json(result.rows);
+        const history = await departmentService.getHistory(mapb);
+        res.json(history);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

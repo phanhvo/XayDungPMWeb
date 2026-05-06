@@ -27,3 +27,23 @@ exports.checkOut = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+exports.getAllAttendances = async (req, res) => {
+  try {
+    const { date, month, year } = req.query;
+    const data = await attendanceService.getAllAttendances(date, month, year);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.adminUpdateAttendance = async (req, res) => {
+  try {
+      const { macc } = req.params;
+      const updatedRecord = await attendanceService.adminUpdateAttendance(macc, req.body);
+      res.status(200).json({ message: "Cập nhật giờ Check-out thành công!", data: updatedRecord });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};

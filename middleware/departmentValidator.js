@@ -14,7 +14,7 @@ exports.validateDepartment = (req, res, next) => {
     }
 
     // 2. Kiểm tra Tên phòng ban
-    if (!tenpban || tenpban.trim().length < 3) {
+    if (!tenpban || tenpban.trim().length < 2) {
         return res.status(400).json({ error: "Tên phòng ban phải từ 3 ký tự trở lên." });
     }
 
